@@ -1,0 +1,19 @@
+name: epp_finpro_env
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - jupyterlab
+  - python=3.9.13
+  - matplotlib
+  - numpy
+  - ipykernel
+  - pre-commit
+  - pandas
+  - pip
+  - pyyaml
+  - statsmodels
+  - pip:
+    - kaleido
