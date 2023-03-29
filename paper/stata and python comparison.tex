@@ -1,0 +1,120 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr} % Formats the header
+\pagestyle{fancy}
+\fancyfoot[C]{--~\thepage~--}
+\usepackage{geometry} % Formats the paper size, orientation, and margins
+\usepackage{caption}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+        }
+\urlstyle{same}
+\usepackage{cite}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{apacite}
+\usepackage{setspace}
+\usepackage{url}
+\usepackage{siunitx}                      
+\usepackage[format=plain,
+            font=it]{caption} % Italicizes figure captions
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage{wrapfig}
+\usepackage{booktabs}
+
+
+\title{A Comparison of Python and Stata in Data Management and Analysis
+}
+\author{Moritz Raykowski}
+\date{March 2023}
+
+\begin{document}
+\section{Introduction}
+I conducted data management and analysis in stata (17) and python (3.09) to compare these programs 
+and arrive at a collection of functionalities that might be of use if integrated in current python 
+libraries and stata functions.
+
+Fundamentally, I cleaned a data set to be used for a series of regressions, the results of which I use to construct coefficient plots 
+(dot/whisker plots).
+
+As a brief Introduction I will touch on the provided data, code, and analysis I run.
+
+The data is a set of collected survey responses from july of 2022. For my master's thesis I reached out to all German 
+disability and inclusion representatives on district and district-free city level within an audit-survey-experiment.
+I randomly disclosed my disability via email and asked for survey answers with a selective mentioning of my disability 
+in the survey for a third group to control for selecting into treatment and attrition effects.
+I investigate political communication towards people with disabilities within this research design.
+
+That makes for three experimental groups:
+
+\begin{equation}
+    D_{i} = \begin{cases}
+          2 & \text{if disability disclosure only in survey (treatment with attrition control)}\\
+          1 & \text{if disability disclosure in email and survey (full treatment)}\\
+          0 & \text{if no disability disclosure at all (control)}\\
+        \end{cases} 
+    \end{equation}
+
+I estimate an intent to treat effect on the subjects that answered for five outcome variables, that are 
+self reported policy scores. 
+All answers are scaled from $-10$ to $+10$ including $0$ thereby allowing respondents to report 
+not only stagnating but negative states. The questions are the following:
+
+\begin{enumerate}
+
+\item To which degree do you think does inclusion for people with disabilities in your city work? 
+
+\item To which degree does the city council take your recommendations on inclusion and disability into account when making decisions?
+
+\item To which degree do city politics in your city take the interests and needs of citizens with disabilities into account?
+
+\item How well is your service able to solve the daily problems that citizens with disabilities face?
+
+\item To which degree is your position known to disabled in the city?
+
+\end{enumerate}
+
+I calculated lee bounds on the treatment effect, due to selection into treatment. I ran naive and progressed
+models as well as robustness checks in various specifications and presented recovered results in coefplots.
+
+\section{Data Management}
+I will discuss main strategies and problems as well as appearing advantages for both programs. Afterwards I 
+will compare the two workflows.
+\subsection{Stata}
+In stata variable names cannot be that long, thus renaming might be neccessary and one has to compromise on 
+
+
+\subsection{Python}
+
+
+\subsection{Comparison}
+
+
+\section{Analysis}
+
+\subsection{Stata}
+
+
+\subsection{Python}
+
+
+\subsection{Comparison}
+
+I was not able to estimate lee bounds in python. I tried to use scipy.optimize.Bounds
+from statsmodels.stats.contrast import ContrastResults
+from statsmodels.stats.multitest import multipletests
+from scipy.optimize import Bounds
+
+\section{Conclusion}
