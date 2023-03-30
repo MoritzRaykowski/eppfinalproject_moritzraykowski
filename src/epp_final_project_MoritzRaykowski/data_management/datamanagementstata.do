@@ -1,11 +1,14 @@
 *data management stata
-import excel "C:\Users\MoritzRaykowski\Desktop\zwischen\src\epp_final_project_MoritzRaykowski\data\surveydataraw.xls", sheet("Sheet1") firstrow
+import excel "C:\Users\MoritzRaykowski\Desktop\zwischen\src\epp_final_project_MoritzRaykowski\data\surveydataraw.xls", sheet("Sheet1") firstrow  change
 
 *setting directory
 *set directory in windows
 cd "C:\Users\MoritzRaykowski\Desktop\zwischen\src\epp_final_project_MoritzRaykowski\data_cleaned" 
 *set directory in mac and linux
 *cd ~/src/dataclean
+
+change
+
 
 *renaming variables that are too long for stata
 rename council_member_politiciancitizen counc_memb_polcit

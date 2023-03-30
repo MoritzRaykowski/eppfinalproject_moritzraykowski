@@ -1,5 +1,10 @@
 # eppfinalproject_moritzraykowski
+The path switches I make in my files are built on Path.home / 'Desktop' / 'epp_repo'
+I did not get a automated pytask template running, thus I tried to build as automated files as possible. 
+So if you clone this repository into a folder named epp_repo on your desktop everything should run smoothly!
+
 I provide a comparison in data management/manipulation and analysis (regressions) and their plotting between python and stata to see which utilities from each program might be missing in the other one and might be helpful for the future.
+
 
 
 This repository contains the following:
@@ -16,5 +21,13 @@ This repository contains the following:
 
 6. a .tex file in which I discuss the main differences I found between the used python libraries and stata
 
+7. Output directories for the cleaned dta sets in src under data_cleaned as well as the output tables and figures of the analysis in bld
 
+# How to use the repository 
+
+You open the stata do file for datamanagement (and change the directory to data?) and execute it. You open the jipynb for datamanagement and run it.
+You open the stata do file for analysis (and change the directory to data_cleaned?) and execute it. You open the jpnb for analysis and run it.
+Cleaned data and outputs by both softwares are now in their dedicated folders
+
+You open the .tex in the paper folder and convert it to pdf.  
 

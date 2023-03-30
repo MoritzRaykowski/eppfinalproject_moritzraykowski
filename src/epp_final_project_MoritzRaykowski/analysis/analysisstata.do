@@ -1,8 +1,8 @@
 *analysis epp
 use "C:\Users\MoritzRaykowski\Desktop\zwischen\src\epp_final_project_MoritzRaykowski\data_cleaned\surveywstata.dta" 
-
+change
 *set directory in windows
-cd "C:\Users\MoritzRaykowski\Desktop\zwischen\bld\tables_statapython"
+cd "C:\Users\MoritzRaykowski\Desktop\zwischen\bld\tables_statapython" change
 *set directory in mac and linux
 *cd ~/bld/tables_statapython
 
