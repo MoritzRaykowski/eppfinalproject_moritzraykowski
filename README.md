@@ -23,15 +23,6 @@ This repository contains the following:
 
 7. Output directories for the cleaned dta sets in src under data_cleaned as well as the output tables and figures of the analysis in bld
 
-
-# How to use the repository 
-
-You open the stata do file for datamanagement (and change the directory to data?) and execute it. You open the jpnb for datamanagement (put in the links for your paths on top and bottom?) and run it.
-You open the stata do file for analysis (and change the directory to data_cleaned?) and execute it. You open the jpnb for analysis (put in the links for your paths on top and bottom to data_cleanend?) and run it.
-You open the .tex in the paper folder and convert it to pdf.  
-
-7. Output directories for the cleaned dta sets in src under data_cleaned as well as the output tables and figures of the analysis in bld
-
 # How to use the repository 
 
 You open the stata do file for datamanagement (and change the directory to data?) and execute it. You open the jipynb for datamanagement and run it.
