@@ -1,13 +1,24 @@
 *data management stata
-import excel "C:\Users\MoritzRaykowski\Desktop\zwischen\src\epp_final_project_MoritzRaykowski\data\surveydataraw.xls", sheet("Sheet1") firstrow  change
+*automatically setting windows or mac/linux directory
+*windows
+*tempfile temp
+*shell echo %USERPROFILE% > `temp'
+*file open myfile using `temp', read
+*file read myfile line
+*file close myfile
+*local home = trim("`line'")
+*cd "`home'\Desktop\epp_repo\eppfinalproject_moritzraykowski\src\epp_final_project_MoritzRaykowski\data"
+*import excel "surveydataraw.xls", sheet("Sheet1") firstrow  
 
-*setting directory
-*set directory in windows
-cd "C:\Users\MoritzRaykowski\Desktop\zwischen\src\epp_final_project_MoritzRaykowski\data_cleaned" 
-*set directory in mac and linux
-*cd ~/src/dataclean
-
-change
+* macOS/Linux
+tempfile temp
+shell echo $HOME > `temp'
+file open myfile using `temp', read
+file read myfile line
+file close myfile
+local home1 = trim("`line'")
+cd "`home1'/Desktop/epp_repo/eppfinalproject_moritzraykowski/src/epp_final_project_MoritzRaykowski/data"
+import excel "surveydataraw.xls", sheet("Sheet1") firstrow  
 
 
 *renaming variables that are too long for stata
@@ -81,5 +92,9 @@ replace ControlvsFull=0 if Treatment_ID==0
 replace ControlvsFull=1 if Treatment_ID==1
 gen select=0 
 replace select=1 if ControlvsFull!=.
+
+*cd "`home'\Desktop\epp_repo\eppfinalproject_moritzraykowski\src\epp_final_project_MoritzRaykowski\data_cleaned"
+cd "`home1'/Desktop/epp_repo/eppfinalproject_moritzraykowski/src/epp_final_project_MoritzRaykowski/data_cleaned"
+
 
 save "surveywstata.dta"

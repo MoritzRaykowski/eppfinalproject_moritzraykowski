@@ -1,15 +1,30 @@
-*analysis epp
-use "C:\Users\MoritzRaykowski\Desktop\zwischen\src\epp_final_project_MoritzRaykowski\data_cleaned\surveywstata.dta" 
-change
-*set directory in windows
-cd "C:\Users\MoritzRaykowski\Desktop\zwischen\bld\tables_statapython" change
-*set directory in mac and linux
-*cd ~/bld/tables_statapython
+*automatically setting windows or mac/linux directory to get and store data and graphs
+*windows
+*tempfile temp
+*shell echo %USERPROFILE% > `temp'
+*file open myfile using `temp', read
+*file read myfile line
+*file close myfile
+*local home = trim("`line'")
+*use "`home'\Desktop\epp_repo\eppfinalproject_moritzraykowski\src\epp_final_project_MoritzRaykowski\data_cleaned\surveywstata.dta"
 
-*installing required stata modules for poltting, storing and exporting results, and leebounds
+*macOS/Linux
+tempfile temp
+shell echo $HOME > `temp'
+file open myfile using `temp', read
+file read myfile line
+file close myfile
+local home1 = trim("`line'")
+use "`home1'/Desktop/epp_repo/eppfinalproject_moritzraykowski/src/epp_final_project_MoritzRaykowski/data_cleaned/surveywstata"
+
+*installing required stata modules for plotting, storing and exporting results, and leebounds
 ssc install coefplot
 ssc install estout
 ssc install leebounds
+
+*cd "`home'\Desktop\epp_repo\eppfinalproject_moritzraykowski\bld\tables_statapython"
+cd "`home1'/Desktop/epp_repo/eppfinalproject_moritzraykowski/bld/tables_statapython"
+
 
 *by preserving and restoring the data in memory is unchanged, the clean data set stays the way
 *it is and one can always return to tzhe initial state
@@ -25,8 +40,10 @@ esttab using leebounds.tex, ci nocons
 
 restore
 *restoring to initial state
-cd "C:\Users\MoritzRaykowski\Desktop\zwischen\bld\figures_statapython"
-*cd ~/bld/figures_statapython
+
+*cd "`home'\Desktop\epp_repo\eppfinalproject_moritzraykowski\bld\figures_statapython"
+cd "`home1'/Desktop/epp_repo/eppfinalproject_moritzraykowski/bld/figures_statapython"
+
 
 *Figure 1: naive ITT estimates of the treatment on reported scores
 preserve
