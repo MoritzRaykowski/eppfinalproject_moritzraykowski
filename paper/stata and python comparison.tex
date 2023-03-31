@@ -35,6 +35,7 @@
 \usepackage{booktabs}
 
 
+
 \title{A Comparison of Python and Stata in Data Management and Analysis
 }
 \author{Moritz Raykowski}
@@ -45,19 +46,16 @@
 I conducted data management and analysis in stata (17) and python (3.09) to compare these programs 
 and arrive at a collection of functionalities that might be of use if integrated in current python 
 libraries and stata functions.
-
-Fundamentally, I cleaned a data set to be used for a series of regressions, the results of which I use to construct coefficient plots 
-(dot/whisker plots).
-
+Fundamentally, I cleaned a data set to be used for a series of regressions, the results of which 
+I use to construct coefficient plots (sometimes also called dot or whisker plots).
 As a brief Introduction I will touch on the provided data, code, and analysis I run.
 
 The data is a set of collected survey responses from july of 2022. I am doing political science and political economy.
 For my master's thesis I reached out to all German disability and inclusion representatives on district and district-free city 
-level within an audit-survey-experiment. I randomly disclosed my disability via email and asked for survey answers with a selective mentioning of my disability 
-only in the survey for a third group to control for selecting into treatment and attrition effects.
-I investigate political communication towards people with disabilities within this research design.
-
-That makes for three experimental groups:
+level within an audit-survey-experiment. I randomly disclosed my disability via email and asked for survey answers 
+with a selective mentioning of my disability only in the survey for a third group to control for selecting into 
+treatment and attrition effects.I investigate political communication towards people with disabilities 
+within this research design. That makes for three experimental groups:
 
 \begin{equation}
     D_{i} = \begin{cases}
@@ -86,45 +84,135 @@ not only stagnating but negative states. The questions are the following:
 
 \end{enumerate}
 
-I calculated lee bounds on the treatment effect, due to selection into treatment. I ran naive and progressed
+I calculated lee bounds on the treatment effects, due to selection into treatment. I ran naive and progressed
 models as well as robustness checks in various specifications and presented recovered results in coefplots.
 
 \section{Data Management}
-I will discuss main strategies and problems as well as appearing advantages for both programs. Afterwards I 
-will compare the two workflows.
+I will discuss problems as well as appearing advantages for both programs.
+I will do this with a focus on python since its users and availability have more 
+reach than license bounded stata versions.
 \subsection{Stata}
-In stata variable names cannot be that long, thus renaming might be neccessary and one has to compromise on possible names.
-There is an established lee bounds command as well as coefplot command, making both steps pretty sraight forward. 
-
+In stata variable names cannot be that long, thus renaming might be necessary and one has to compromise 
+on possible names.
+It is easy to replace, decode, and destring. Stata has a lot of utility beyond that, but it is not that well documented
+somehow, especially when it requires a bit more coding in stata. As I tried to see where stata matches python pandas, 
+I realised there is a lot of utility, but it is really hard to find. The problem of more complex operations is,
+that stata wants to operate on variable level and it takes more code to make general systematic changes, for example in the ds loop I used.
 
 \subsection{Python}
-
-
-\subsection{Comparison}
-
-
-
-Clear negatives and realms of improvement in python
-
-Not automatically cutting observations for clustering 
-
-
-There is no leebound command, at least I could not find one. 
-
+In pandas it is established that you can do almost everything. I only ran into one interesting complication that
+stata handles in a more pragmatic fashion.
+If one encodes categorial or ordinal variables in pandas, missing values np.NaN are encoded as well as a typ of observation
+value. In stata a missing value encoded keeps being a missing value. Suppose there is a column as in my dataset, 
+the status of a person being a representative. There are representatives and non representatives, regular city 
+council member for disability issues. That leaves us with a person not filling this in or being a representative:
+[politician, pd.Nan, citizen, politician, pd.NaN ] is encoded to [1, 2, 3, 1, 2].
+This is not a drastic issue. The optimization is neverthless possible.
+It should automatically be treated as a missing value when encoded and stay pd.NaN. 
+There are other types of missing value concepts in python for which this problem might not exist. 
 
 \section{Analysis}
 
 \subsection{Stata}
+There is an established lee bounds command as well as coefplot command, making the steps of my analysis pretty straight forward. 
+In stata certain results are automatically stored in the background and can be used right away without having to create
+an additional file from which results are then used. Through the help command one can see which types of information
+are stored and available for use.
+The downside is the inflexible working of plots. It is very hard to get fully individualized plots.
 
+\subsection{Python}
+There are a few things that I think would improve statistical analysis in python:
+Having a lee bound function and not having to reconstruct it.
+
+There is no leebound function, at least I could not find one. Chatgpt lee bound constructions I got after 
+requests do not emulate what lee bounds are doing in stata or R. I tried to use scipy.optimize.Bounds
+and statsmodels.stats.contrast, and statsmodels.stats.multitest.
+This function giving leebounds could look something like this:
+
+You need a variable which selects all groups that are used. For the outcome variables, observations get ranked
+according to their values. Then the lengths of the subcolumns of the observations with the used treatment conditions 
+or indicators will be used to take the difference in n per group to receive the proportion of subjects that would 
+be cut from the experimental group with surplus participation due to selection into treatment.
+Then the operation, in this case a regression will be done, with the 5 lowest ranked and the 5 highest rank observation
+values of the dependent variables cut for equal n.
+
+In python there appears to be no automatic cutting of observations for clustering. 
+When one does a regression and there is only data for 80 percent of the people on one independent variable, 
+the number of observations automatically gets reduced to the subset of observations where all ranks for all 
+used variables are non missing.That is what happened in the progressive modelling. 
+However, if one wants to cluster the standard errors on a variable which observations and missings do not fit
+the thereby given subset of 80 percent of the observations, one retrieves an error message that the lengths 
+of the inputs are not equal. Python tries to take 100 percent of the observations that exist for the cluster 
+variable. That is why I had to create the subset through cutting out the selection of observations on the cluster
+variable that matches the variables used as independent variables. 
+It would be useful if the used cluster in .fit() would be adjusted in matched length just like other regression inputs.
+
+An imitation of coefplot for coefficient plotting as a library that stores p-values and standard errors as 
+well, would be great. The function could do the extra step with the additional coef dataframe I built and reduced 
+for the plotting automatically after doing the regressions:
+
+\begin{lstlisting}[language=Python]
+    model = smf.ols
+
+    df_results = coefcollection.model['column names']
+\end{lstlisting}
+
+\section{Conclusion}
+I was able to reproduce my results. The second coefficient in the third plot made in python is different from the one in
+the stata produced plot because the encoding in stata gave different automated ranks than the non encoded dummy in python 
+in the regression. These two coefficients are reproducible if I would have added the same encoding just as I did with education for example.
+I still could have added a legend to python plot 3 with ax.text and boxes as well as stored the other regression results
+and plotted them in a horezontal axis on marker height. 
+Stata does not compare to pandas, although it is surprising how much it can do in terms of data management.
+I could not test for all kinds of different plotting and statistics packages in python.
+Python is very flexibke and open in plotting.
+
+\section{Outputs}
+\subsection{Stata}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[]{../bld/figures_statapython/naive ITT estimates of the treatment on reported policy scores_epp.jpg}
+    \end{center}
+    \caption{}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[]{../bld/figures_statapython/progressed ITT estimates of the treatment on reported policy scores_epp.jpg}
+    \end{center}
+    \caption{}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[]{../bld/figures_statapython/robustness plot for all specifications on the popularity scores_epp.jpg}
+    \end{center}
+    \caption{}
+\end{figure}
 
 \subsection{Python}
 
+\begin{figure}
+    \begin{center}
+        \includegraphics[]{../bld/figures_statapython/naive_model.jpg}
+    \end{center}
+    \caption{}
+\end{figure}
 
-\subsection{Comparison}
 
-I was not able to estimate lee bounds in python. I tried to use scipy.optimize.Bounds
-from statsmodels.stats.contrast import ContrastResults
-from statsmodels.stats.multitest import multipletests
-from scipy.optimize import Bounds
+\begin{figure}
+    \begin{center}
+        \includegraphics[]{../bld/figures_statapython/progressed_model.jpg}
+    \end{center}
+    \caption{}
+\end{figure}
 
-\section{Conclusion}
+\begin{figure}
+    \begin{center}
+        \includegraphics[]{../bld/figures_statapython/robustness_on_popularity.jpg}
+    \end{center}
+    \caption{}
+\end{figure}
+
+\end{document}

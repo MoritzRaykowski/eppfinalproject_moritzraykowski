@@ -33,13 +33,22 @@ foreach v of local strings1 {
 }
 
 *replacing unclear survey answers with missings
-replace budget="." if budget=="not fixed"
-replace budget="." if budget=="no ans"
-replace budget="." if budget=="unknown"
-replace council_term_length="." if council_term_length=="no value" 
-replace duration_terms_in_years="." if duration_terms_in_years=="not fixed"
-replace date_position_established="." if date_position_established=="unknown"
-replace date_council_established="." if date_council_established=="unknown"
+ds, has(type string)
+foreach var of varlist `r(varlist)' {
+    qui replace `var' = subinstr(`var', "no value", ".", .)
+}
+ds, has(type string)
+foreach var of varlist `r(varlist)' {
+    qui replace `var' = subinstr(`var', "unknown", ".", .)
+}
+ds, has(type string)
+foreach var of varlist `r(varlist)' {
+    qui replace `var' = subinstr(`var', "no ans", ".", .)
+}
+ds, has(type string)
+foreach var of varlist `r(varlist)' {
+    qui replace `var' = subinstr(`var', "not fixed", ".", .)
+}
 
 *destringing, making variables numeric
 local strings2 date_position_established budget duration_terms_in_years council_term_length date_council_established disability_degree INCLUSION RECOMMENDATION INTEREST PROBLEMSOLVING POPULARITY age population
