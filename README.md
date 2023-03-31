@@ -29,7 +29,8 @@ Since I did not get cookiecutters going correctly, I tried to automate my projec
 
 1. You clone the repository into a folder named epp_repo on your desktop. This is the easiest way to not have to replace paths manually within the files. I used pathlib and os in python to access the root and specified Desktop and epp_repo as parent folders of the repository. In stata All code used to switch directories in stata is currently made active to work on macOS and Linux, I wrote the windows equivalents right next to the code each time but deactivated.
 
-2. You activate the environment epp_finpro_env.yml. 
+2. You activate the environment epp_finpro_env.yml. Select it as a kernel for the ipynb files for data management 
+and analysis. 
 
 3. You open the file datamanagementpython.ipynb and select the environment as a kernel. Then you run the file, then exit. Cleaned data is created.
 
